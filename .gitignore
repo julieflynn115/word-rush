@@ -1,0 +1,38 @@
+node_modules/
+dist/
+.npm/
+.temp/
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Taro build output
+.cache/
+.output/
+.taro/
+
+# PAI preview (local only, do not commit)
+.pai/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+Thumbs.db
+ehthumbs.db

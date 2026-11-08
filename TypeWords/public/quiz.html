@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>单词闯关 · TypeWords</title>
+<style>
+:root{--primary:#7c5cff;--primary2:#5b8cff;--ok:#22b07d;--bad:#e5524d;--text:#23243a;--muted:#8a8ca3;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:linear-gradient(135deg,#eef0ff 0%,#f8f4ff 50%,#eef7ff 100%);min-height:100vh;color:var(--text);}
+.wrap{max-width:880px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;letter-spacing:1px}
+.sub{color:var(--muted);margin-top:6px;font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.link{color:var(--primary);text-decoration:none;font-size:14px;white-space:nowrap}
+.section{margin-top:28px}
+.section h2{font-size:18px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.stage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 6px 24px rgba(80,90,180,.08);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;border:2px solid transparent}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(80,90,180,.16);border-color:var(--primary)}
+.card .name{font-size:16px;font-weight:700}
+.card .meta{color:var(--muted);font-size:13px;margin-top:6px}
+.badge{display:inline-block;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;font-size:12px;border-radius:999px;padding:2px 10px}
+.level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:10px;margin-top:16px}
+.tile{aspect-ratio:1;background:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(80,90,180,.08);font-weight:700;transition:transform .12s;user-select:none}
+.tile:hover{transform:scale(1.06)}
+.tile.locked{opacity:.35;cursor:not-allowed;filter:grayscale(1)}
+.tile.locked:hover{transform:none}
+.tile .stars{font-size:11px;color:#f5a623;margin-top:2px;font-weight:400;min-height:13px}
+.tile .lock{font-size:11px;color:#b7b9cc;margin-top:2px;font-weight:400}
+.pager{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:20px}
+.btn{border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:600;cursor:pointer;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 6px 18px rgba(124,92,255,.35);transition:transform .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:#fff;color:var(--primary);box-shadow:none;border:2px solid var(--primary)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0;flex-wrap:wrap}
+.hearts{font-size:20px;letter-spacing:3px;color:var(--bad)}
+.hearts .off{color:#d6d8e6}
+.score{font-size:15px;font-weight:700;color:var(--primary)}
+.combo{background:linear-gradient(90deg,#ff8a3d,#ff5c7a);color:#fff;padding:3px 12px;border-radius:999px;font-size:13px;font-weight:700;animation:pop .25s}
+@keyframes pop{50%{transform:scale(1.25)}}
+.progress{height:8px;background:#e6e8f7;border-radius:99px;overflow:hidden;margin-bottom:20px}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px;transition:width .3s}
+.qcard{background:#fff;border-radius:20px;padding:34px 26px;box-shadow:0 10px 36px rgba(80,90,180,.12);text-align:center}
+.qtype{display:inline-block;font-size:12px;color:var(--muted);border:1px solid #e2e4f2;border-radius:999px;padding:3px 12px;margin-bottom:14px}
+.qword{font-size:36px;font-weight:800;letter-spacing:1px;word-break:break-word}
+.qphon{color:var(--muted);font-size:16px;margin-top:8px}
+.speak{border:1px solid #dfe2f5;background:#eef0ff;border-radius:999px;padding:6px 18px;font-size:13px;color:var(--primary);cursor:pointer;margin-top:14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+@media(max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{background:#f7f8ff;border:2px solid #e8eaf7;border-radius:14px;padding:16px;font-size:16px;cursor:pointer;transition:all .12s;text-align:left;line-height:1.4;color:var(--text)}
+.opt:hover:not(:disabled){border-color:var(--primary);background:#f0edff}
+.opt.correct{border-color:var(--ok);background:#e6f9f1;color:var(--ok);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:#fdeeed;color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.result{text-align:center;padding:40px 20px}
+.bigstars{font-size:52px;letter-spacing:8px;color:#f5a623}
+.bigstars .dim{color:#dcdceb}
+.rscore{font-size:20px;margin-top:12px;font-weight:700}
+.rline{color:var(--muted);margin-top:8px;font-size:14px}
+.rbtns{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.wrong-list{margin:22px auto 0;text-align:left;background:#fff7f5;border:1px solid #ffd9d4;border-radius:14px;padding:14px 18px;font-size:14px;max-height:220px;overflow:auto;max-width:520px}
+.wrong-list b{color:var(--bad)}
+.empty{color:var(--muted);text-align:center;padding:60px 0}
+.pill{background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 4px 14px rgba(80,90,180,.08);font-size:14px;color:var(--muted)}
+.pill b{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="empty">加载中…</div></div>
+<script>
+'use strict';
+const app = document.getElementById('app');
+const PKEY = 'tw-quiz-progress-v1', WKEY = 'tw-quiz-wrong-v1';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
+const STAGES = [
+  { label:'小学阶段', match:u => u.startsWith('PEPXiaoXue') },
+  { label:'初中阶段', match:u => u.startsWith('PEPChuZhong') },
+  { label:'高中阶段', match:u => u.startsWith('PEPGaoZhong') },
+  { label:'大学四级', match:u => u.startsWith('CET4') },
+  { label:'大学六级', match:u => u.startsWith('CET6') },
+  { label:'专业八级', match:u => u.startsWith('Level8') },
+  { label:'商务英语', match:u => u.startsWith('BEC') },
+  { label:'托福',     match:u => u.startsWith('TOEFL') },
+  { label:'雅思',     match:u => u.startsWith('IELTS') },
+];
+let catalog = [];
+const wordCache = {};
+
+function shuffle(a){ a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function sample(a, n){ return shuffle(a).slice(0, n); }
+function firstCn(w){ const t = (w.trans && w.trans[0]) || {}; return (t.cn || '').split(/[；;]/)[0].trim(); }
+function validWords(list){ return list.filter(w => w && w.word && firstCn(w)); }
+async function ensureCatalog(){
+  if (catalog.length) return;
+  const r = await fetch('/list/word.json');
+  const data = await r.json();
+  catalog = data.map(d => ({ name: d.name, url: d.url, length: d.length || 0, category: d.category || '' }));
+}
+async function loadDict(url){
+  if (wordCache[url]) return wordCache[url];
+  const r = await fetch('/dicts/en/word/' + url);
+  const data = await r.json();
+  wordCache[url] = validWords(Array.isArray(data) ? data : []);
+  return wordCache[url];
+}
+function getProg(){ return store.get(PKEY, {}); }
+function setProg(p){ store.set(PKEY, p); }
+function getWrong(){ return store.get(WKEY, {}); }
+function setWrong(w){ store.set(WKEY, w); }
+function dictProg(url){ return getProg()[url] || { unlocked: 1, levels: {} }; }
+function addWrong(url, w){
+  const all = getWrong();
+  const list = all[url] || [];
+  if (!list.find(x => x.word === w.word)){
+    list.push({ id: w.id, word: w.word, phonetic0: w.phonetic0 || '', trans: w.trans || [] });
+    all[url] = list; setWrong(all);
+  }
+}
+
+let actx = null;
+function beep(f, d, type, g){
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), v = actx.createGain();
+    o.type = type || 'sine'; o.frequency.value = f; v.gain.value = g || 0.08;
+    o.connect(v); v.connect(actx.destination); o.start();
+    v.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + d);
+    o.stop(actx.currentTime + d);
+  } catch(e){}
+}
+function sfxGood(){ beep(660, .12); setTimeout(() => beep(880, .18), 90); }
+function sfxBad(){ beep(180, .25, 'sawtooth', .06); }
+function speak(t){
+  try {
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = 'en-US'; u.rate = 0.9;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch(e){}
+}
+
+/* ---------- 首页：阶段 + 词库 ---------- */
+async function renderHome(){
+  app.innerHTML = '<div class="empty">加载中…</div>';
+  await ensureCatalog();
+  const wrong = getWrong();
+  let html = '<div class="top"><div><h1>单词闯关</h1><div class="sub">每关 10 题 · 连对加分 · 错题重练 · 进度自动保存</div></div><a class="link" href="/words">← 返回词库练习</a></div>';
+  for (const s of STAGES){
+    const list = catalog.filter(d => s.match(d.url));
+    if (!list.length) continue;
+    html += `<div class="section"><h2>${s.label}<span class="badge">${list.length} 本词库</span></h2><div class="stage-grid">`;
+    for (const d of list){
+      const p = dictProg(d.url);
+      const stars = Object.values(p.levels || {}).reduce((a, l) => a + (l.stars || 0), 0);
+      const wc = (wrong[d.url] || []).length;
+      html += `<div class="card" onclick="location.hash='#/levels?dict=${encodeURIComponent(d.url)}'">
+        <div class="name">${d.name}</div>
+        <div class="meta">${d.length} 词 · ${Math.max(1, Math.ceil(d.length / 10))} 关${stars ? ' · ★' + stars : ''}${wc ? ' · 错词 ' + wc : ''}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+  app.innerHTML = html;
+}
+
+/* ---------- 选关页 ---------- */
+let levelsUrl = '', levelsPage = 0;
+async function renderLevels(url, page){
+  app.innerHTML = '<div class="empty">加载中…</div>';
+  await ensureCatalog();
+  const d = catalog.find(x => x.url === url);
+  if (!d){ location.hash = ''; return; }
+  levelsUrl = url;
+  const total = Math.max(1, Math.ceil(d.length / 10));
+  const p = dictProg(url);
+  const perPage = 100;
+  const pages = Math.ceil(total / perPage);
+  if (page == null) page = Math.floor((p.unlocked - 1) / perPage);
+  levelsPage = Math.max(0, Math.min(page, pages - 1));
+  const start = levelsPage * perPage + 1, end = Math.min(total, (levelsPage + 1) * perPage);
+  const wc = (getWrong()[url] || []).length;
+  const starsTotal = Object.values(p.levels || {}).reduce((a, l) => a + (l.stars || 0), 0);
+  const scoreTotal = Object.values(p.levels || {}).reduce((a, l) => a + (l.score || 0), 0);
+  let html = `<div class="top"><div><h1>${d.name}</h1><div class="sub">${d.length} 词 · 共 ${total} 关 · 已解锁到第 ${Math.min(p.unlocked, total)} 关</div></div><a class="link" href="#/">← 返回首页</a></div>
+  <div class="hud">
+    <div class="pill">星星：<b style="color:#f5a623">★ ${starsTotal}</b></div>
+    <div class="pill">总分：<b>${scoreTotal}</b></div>
+    ${wc ? `<button class="btn ghost" onclick="location.hash='#/game?dict=${encodeURIComponent(url)}&mode=review'">错题重练（${wc}）</button>` : ''}
+  </div>
+  <div class="level-grid">`;
+  for (let i = start; i <= end; i++){
+    const locked = i > p.unlocked;
+    const lv = (p.levels || {})[i];
+    const stars = lv ? '★'.repeat(lv.stars || 0) : '';
+    html += `<div class="tile ${locked ? 'locked' : ''}" ${locked ? '' : `onclick="location.hash='#/game?dict=${encodeURIComponent(url)}&level=${i}'"`}>
+      <div>${i}</div>${locked ? '<div class="lock">未解锁</div>' : `<div class="stars">${stars}</div>`}</div>`;
+  }
+  html += '</div>';
+  if (pages > 1){
+    html += `<div class="pager">
+      <button class="btn ghost" ${levelsPage === 0 ? 'disabled' : ''} onclick="renderLevels(levelsUrl, ${levelsPage - 1})">上一页</button>
+      <div class="pill">${levelsPage + 1} / ${pages}</div>
+      <button class="btn ghost" ${levelsPage >= pages - 1 ? 'disabled' : ''} onclick="renderLevels(levelsUrl, ${levelsPage + 1})">下一页</button>
+    </div>`;
+  }
+  app.innerHTML = html;
+}
+
+/* ---------- 闯关答题 ---------- */
+let G = null;
+async function startGame(url, level, review){
+  app.innerHTML = '<div class="empty">单词加载中…</div>';
+  await ensureCatalog();
+  const words = await loadDict(url);
+  const d = catalog.find(x => x.url === url) || { name: url, length: words.length };
+  let qs;
+  if (review){
+    const wrongList = getWrong()[url] || [];
+    if (!wrongList.length){ location.hash = '#/levels?dict=' + encodeURIComponent(url); return; }
+    qs = sample(wrongList, Math.min(10, wrongList.length)).map(w => {
+      const full = words.find(x => x.word === w.word) || w;
+      return makeQ(full, words, Math.random() < 0.5);
+    });
+  } else {
+    const slice = words.slice((level - 1) * 10, (level - 1) * 10 + 10);
+    if (!slice.length){ location.hash = '#/levels?dict=' + encodeURIComponent(url); return; }
+    qs = slice.map(w => makeQ(w, words, Math.random() < 0.5));
+  }
+  G = { url, dict: d, words, level, review, qs, idx: 0, hearts: 3, combo: 0, score: 0, right: 0, wrong: [], done: false };
+  renderQ();
+}
+function makeQ(w, pool, enToCn){
+  const cn = firstCn(w);
+  let opts;
+  if (enToCn){
+    const ds = sample(pool.filter(x => x.id !== w.id && firstCn(x) && firstCn(x) !== cn), 3);
+    opts = shuffle([{ t: cn, ok: true }].concat(ds.map(x => ({ t: firstCn(x), ok: false }))));
+  } else {
+    const ds = sample(pool.filter(x => x.id !== w.id), 3);
+    opts = shuffle([{ t: w.word, ok: true }].concat(ds.map(x => ({ t: x.word, ok: false }))));
+  }
+  return { w, enToCn, opts, answer: -1 };
+}
+function renderQ(){
+  const g = G, q = g.qs[g.idx], total = g.qs.length;
+  const heartsHtml = '<span>' + '♥'.repeat(g.hearts) + '</span>'.replace('<span>', '<span>') ;
+  let hearts = '';
+  for (let i = 0; i < 3; i++) hearts += i < g.hearts ? '♥' : '<span class="off">♥</span>';
+  app.innerHTML = `<div class="top"><div><h1 style="font-size:20px">${g.review ? '错题重练' : g.dict.name + ' · 第 ' + g.level + ' 关'}</h1></div><a class="link" href="#/levels?dict=${encodeURIComponent(g.url)}">退出本关</a></div>
+  <div class="hud">
+    <div class="hearts">${hearts}</div>
+    ${g.combo >= 2 ? `<div class="combo">连对 x${g.combo}</div>` : '<div></div>'}
+    <div class="score">得分 ${g.score}</div>
+  </div>
+  <div class="progress"><i style="width:${(g.idx / total) * 100}%"></i></div>
+  <div class="qcard">
+    <div class="qtype">${q.enToCn ? '看英文 · 选中文' : '看中文 · 选英文'} · ${g.idx + 1}/${total}</div>
+    <div class="qword">${q.enToCn ? q.w.word : firstCn(q.w)}</div>
+    ${q.enToCn && q.w.phonetic0 ? `<div class="qphon">/${q.w.phonetic0}/</div>` : ''}
+    <div><button class="speak" id="speakBtn">朗读发音</button></div>
+    <div class="opts">${q.opts.map((o, i) => `<button class="opt" data-i="${i}">${'ABCD'[i]}. ${o.t}</button>`).join('')}</div>
+  </div>`;
+  document.getElementById('speakBtn').onclick = () => speak(q.w.word);
+  document.querySelectorAll('.opt').forEach(b => b.onclick = () => answer(+b.dataset.i));
+  if (q.enToCn) speak(q.w.word);
+}
+function answer(i){
+  const g = G;
+  if (!g || g.done) return;
+  const q = g.qs[g.idx];
+  if (q.answer >= 0) return;
+  q.answer = i;
+  const ok = q.opts[i].ok;
+  document.querySelectorAll('.opt').forEach((b, bi) => {
+    b.disabled = true;
+    if (q.opts[bi].ok) b.classList.add('correct');
+    else if (bi === i) b.classList.add('wrong');
+  });
+  if (ok){
+    g.combo++; g.right++;
+    g.score += 10 + Math.min(g.combo, 10) * 2;
+    sfxGood();
+    if (g.review) removeWrong(g.url, q.w);
+  } else {
+    g.combo = 0; g.hearts--;
+    sfxBad();
+    g.wrong.push(q.w);
+    addWrong(g.url, q.w);
+  }
+  const scoreEl = document.querySelector('.score');
+  if (scoreEl) scoreEl.textContent = '得分 ' + g.score;
+  const heartsEl = document.querySelector('.hearts');
+  if (heartsEl){ let h = ''; for (let n = 0; n < 3; n++) h += n < g.hearts ? '♥' : '<span class="off">♥</span>'; heartsEl.innerHTML = h; }
+  setTimeout(() => {
+    if (g.hearts <= 0) return showFail();
+    g.idx++;
+    if (g.idx >= g.qs.length) return showResult();
+    renderQ();
+  }, ok ? 650 : 1100);
+}
+function removeWrong(url, w){
+  const all = getWrong();
+  const list = (all[url] || []).filter(x => x.word !== w.word);
+  all[url] = list; setWrong(all);
+}
+function wrongListHtml(){
+  if (!G.wrong.length) return '';
+  return `<div class="wrong-list"><b>本关错词：</b><br>${G.wrong.map(w => `${w.word} — ${firstCn(w)}`).join('<br>')}</div>`;
+}
+function showFail(){
+  G.done = true;
+  app.innerHTML = `<div class="result"><div style="font-size:52px;color:var(--bad)">✕</div>
+  <h1 style="margin-top:12px">本关失败</h1>
+  <div class="rline">答对 ${G.right}/${G.qs.length} · 得分 ${G.score}</div>
+  ${wrongListHtml()}
+  <div class="rbtns"><button class="btn" id="retryBtn">再来一次</button>
+  <button class="btn ghost" id="backBtn">返回选关</button></div></div>`;
+  document.getElementById('retryBtn').onclick = () => startGame(G.url, G.level, G.review);
+  document.getElementById('backBtn').onclick = () => { location.hash = '#/levels?dict=' + encodeURIComponent(G.url); };
+}
+function showResult(){
+  const g = G;
+  g.done = true;
+  const err = g.qs.length - g.right;
+  const stars = err === 0 ? 3 : err <= 2 ? 2 : 1;
+  if (!g.review){
+    const prog = getProg();
+    const p = prog[g.url] || { unlocked: 1, levels: {} };
+    const prev = p.levels[g.level] || { stars: 0, score: 0 };
+    p.levels[g.level] = { stars: Math.max(prev.stars, stars), score: Math.max(prev.score, g.score) };
+    p.unlocked = Math.max(p.unlocked, g.level + 1);
+    prog[g.url] = p; setProg(prog);
+  }
+  const total = Math.max(1, Math.ceil((g.dict.length || g.words.length) / 10));
+  const hasNext = !g.review && g.level < total;
+  const remainWrong = (getWrong()[g.url] || []).length;
+  let starsHtml = '';
+  for (let i = 1; i <= 3; i++) starsHtml += `<span class="${i <= stars ? '' : 'dim'}">★</span>`;
+  app.innerHTML = `<div class="result"><div class="bigstars">${starsHtml}</div>
+  <h1 style="margin-top:12px">${g.review ? '错题重练完成' : '恭喜过关'}</h1>
+  <div class="rscore">得分 ${g.score}</div>
+  <div class="rline">答对 ${g.right}/${g.qs.length}${g.review ? ' · 剩余错词 ' + remainWrong : ''}</div>
+  ${wrongListHtml()}
+  <div class="rbtns">
+    ${hasNext ? '<button class="btn" id="nextBtn">下一关 →</button>' : ''}
+    <button class="btn ${hasNext ? 'ghost' : ''}" id="againBtn">再玩一次</button>
+    <button class="btn ghost" id="backBtn">返回选关</button>
+  </div></div>`;
+  if (hasNext) document.getElementById('nextBtn').onclick = () => startGame(g.url, g.level + 1, false);
+  document.getElementById('againBtn').onclick = () => startGame(g.url, g.level, g.review);
+  document.getElementById('backBtn').onclick = () => { location.hash = '#/levels?dict=' + encodeURIComponent(g.url); };
+}
+
+/* ---------- 路由 ---------- */
+function parseHash(){
+  const h = location.hash.slice(1);
+  const [path, qs] = h.split('?');
+  const params = {};
+  new URLSearchParams(qs || '').forEach((v, k) => params[k] = v);
+  return { path: path || '/', params };
+}
+function route(){
+  const { path, params } = parseHash();
+  if (path === '/levels') return renderLevels(params.dict);
+  if (path === '/game') return startGame(params.dict, +params.level || 1, params.mode === 'review');
+  return renderHome();
+}
+window.addEventListener('hashchange', route);
+window.renderLevels = renderLevels;
+window.startGame = startGame;
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ecebff 0%, $color-bg-page 36%);
+}
+
+.container {
+  padding: $spacing-lg $page-padding $spacing-xl;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hearts {
+  display: flex;
+  align-items: center;
+  min-width: 120rpx;
+}
+
+.heart {
+  font-size: 32rpx;
+  line-height: 1;
+  color: $color-error;
+  margin-right: 6rpx;
+  transition: color $transition-base;
+}
+
+.heartLost {
+  color: rgba(244, 81, 108, 0.22);
+}
+
+.stageTag {
+  flex: 1;
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  @include text-ellipsis;
+  padding: 0 $spacing-sm;
+}
+
+.score {
+  min-width: 120rpx;
+  text-align: right;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.track {
+  width: 100%;
+  height: 10rpx;
+  margin-top: $spacing-md;
+  border-radius: $radius-round;
+  background: rgba(91, 87, 245, 0.12);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: $radius-round;
+  background: $gradient-primary;
+  transition: width $transition-base;
+}
+
+.progressText {
+  display: block;
+  margin-top: 12rpx;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.quizCard {
+  margin-top: $spacing-lg;
+  padding: 40rpx $spacing-lg;
+  border-radius: $radius-xl;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  min-height: 300rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.modeRow {
+  display: flex;
+  align-items: center;
+}
+
+.modeTag {
+  padding: 6rpx 20rpx;
+  border-radius: $radius-round;
+  background: $color-primary-soft;
+  color: $color-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.modeHint {
+  margin-left: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+  flex: 1;
+}
+
+.promptBlock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx 0 32rpx;
+}
+
+.promptWord {
+  font-size: 64rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: $line-height-tight;
+  text-align: center;
+  word-break: break-all;
+}
+
+.promptMeaning {
+  font-size: 40rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+.phonetic {
+  margin-top: $spacing-sm;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  text-align: center;
+}
+
+.loadingText {
+  margin-top: 64rpx;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  text-align: center;
+}
+
+.options {
+  margin-top: $spacing-md;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 96rpx;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-sm;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  border: 2rpx solid transparent;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.985);
+    opacity: 0.94;
+  }
+}
+
+.optionCorrect {
+  background: $color-success-soft;
+  border-color: $color-success;
+  box-shadow: none;
+}
+
+.optionWrong {
+  background: $color-error-soft;
+  border-color: $color-error;
+  box-shadow: none;
+}
+
+.optionIndex {
+  width: 44rpx;
+  height: 44rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+  border-radius: $radius-round;
+  background: $color-bg-muted;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  line-height: 44rpx;
+  text-align: center;
+}
+
+.optionText {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  @include text-ellipsis-multi(2);
+}
+
+.optionTextLg {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+}
+
+.optionMark {
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+  font-size: $font-size-lg;
+  color: $color-success;
+  font-weight: $font-weight-bold;
+}
+
+.feedback {
+  margin-top: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+}
+
+.feedbackOk {
+  background: $color-success-soft;
+}
+
+.feedbackBad {
+  background: $color-error-soft;
+}
+
+.feedbackText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.tip {
+  display: block;
+  margin-top: $spacing-md;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: center;
+}

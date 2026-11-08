@@ -1,0 +1,175 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ecebff 0%, $color-bg-page 34%);
+}
+
+.container {
+  padding: $spacing-lg $page-padding $spacing-xl;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 40rpx $spacing-lg 32rpx;
+  border-radius: $radius-xl;
+  background: $gradient-hero;
+  box-shadow: 0 12rpx 32rpx rgba(64, 56, 200, 0.24);
+}
+
+.decorA {
+  position: absolute;
+  top: -72rpx;
+  right: -48rpx;
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.decorB {
+  position: absolute;
+  bottom: -96rpx;
+  left: 96rpx;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.heroTop {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.heroTextGroup {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.kicker {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 1rpx;
+}
+
+.title {
+  margin-top: 10rpx;
+  font-size: 52rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  line-height: $line-height-tight;
+  letter-spacing: 2rpx;
+}
+
+.pill {
+  flex-shrink: 0;
+  padding: 8rpx 24rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1rpx solid rgba(255, 255, 255, 0.28);
+}
+
+.pillText {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  white-space: nowrap;
+}
+
+.statsRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 36rpx;
+  padding: $spacing-md 0;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.statItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statValue {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  line-height: $line-height-tight;
+}
+
+.statLabel {
+  margin-top: 6rpx;
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.statDivider {
+  width: 1rpx;
+  height: 44rpx;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.continueBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding: 0 $spacing-md;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-text-white;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.continueText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  @include text-ellipsis;
+}
+
+.continueArrow {
+  margin-left: $spacing-sm;
+  font-size: 32rpx;
+  color: $color-primary;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: $spacing-xl 0 $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.tips {
+  display: block;
+  margin-top: $spacing-md;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: center;
+  line-height: $line-height-loose;
+}

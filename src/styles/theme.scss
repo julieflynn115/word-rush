@@ -1,0 +1,41 @@
+// ============================================
+// 主题配色变量 —— 单词闯关
+// ============================================
+
+// 品牌主题色
+$color-primary: #5b57f5;
+$color-primary-light: #817bff;
+$color-primary-dark: #4038c8;
+$color-primary-soft: #eeedff;
+
+// 功能色
+$color-success: #16a34a;
+$color-success-soft: #e7f8ee;
+$color-warning: #ff9f1c;
+$color-warning-soft: #fff4e3;
+$color-error: #f4516c;
+$color-error-soft: #ffecef;
+$color-info: #5b57f5;
+$color-star: #ffb020;
+
+// 背景色
+$color-bg-page: #f4f5fb;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f1f2f9;
+$color-bg-muted: #f5f6fb;
+$color-bg-dark: #191a2e;
+
+// 文本色
+$color-text-primary: #17182b;
+$color-text-secondary: #55586f;
+$color-text-tertiary: #9296ad;
+$color-text-disabled: #c2c6d8;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #e9ebf4;
+$color-divider: #f0f1f8;
+
+// 渐变
+$gradient-primary: linear-gradient(135deg, #5b57f5 0%, #8b7bff 100%);
+$gradient-hero: linear-gradient(135deg, #4038c8 0%, #5b57f5 45%, #8b7bff 100%);

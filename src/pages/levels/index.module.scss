@@ -1,0 +1,286 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ecebff 0%, $color-bg-page 30%);
+}
+
+.container {
+  padding: $spacing-lg $page-padding $spacing-xl;
+}
+
+.headerCard {
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  width: 96rpx;
+  height: 96rpx;
+  flex-shrink: 0;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(23, 24, 43, 0.12);
+}
+
+.badgeText {
+  font-size: 30rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  white-space: nowrap;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 0;
+  margin-left: $spacing-md;
+  display: flex;
+  flex-direction: column;
+}
+
+.stageName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.stageDesc {
+  margin-top: 6rpx;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-lg;
+}
+
+.progressLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.progressValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-star;
+}
+
+.track {
+  width: 100%;
+  height: 12rpx;
+  margin-top: $spacing-sm;
+  border-radius: $radius-round;
+  background: $color-bg-muted;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.reviewCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, #fff4e3 0%, #ffe9cf 100%);
+  border: 1rpx solid #ffe0b8;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.99);
+  }
+}
+
+.reviewInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: #c96a00;
+}
+
+.reviewDesc {
+  margin-top: 4rpx;
+  font-size: $font-size-xs;
+  color: #a86f22;
+  @include text-ellipsis;
+}
+
+.reviewBtn {
+  flex-shrink: 0;
+  margin-left: $spacing-md;
+  padding: 10rpx 28rpx;
+  border-radius: $radius-round;
+  background: $color-warning;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  white-space: nowrap;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: $spacing-lg 0 $spacing-sm;
+}
+
+.legendText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.legendCurrent {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.cell {
+  width: 118rpx;
+  height: 118rpx;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform $transition-fast;
+
+  &:active {
+    transform: scale(0.94);
+  }
+}
+
+.cellPassed {
+  background: $color-primary-soft;
+  box-shadow: none;
+}
+
+.cellNext {
+  border: 2rpx solid $color-primary;
+  background: $color-bg-card;
+}
+
+.cellLocked {
+  background: $color-bg-muted;
+  box-shadow: none;
+  opacity: 0.9;
+}
+
+.cellNumber {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: 1.1;
+}
+
+.cellNumberPassed {
+  color: $color-primary-dark;
+}
+
+.cellNumberLocked {
+  color: $color-text-disabled;
+}
+
+.cellStars {
+  display: flex;
+  align-items: center;
+  margin-top: 6rpx;
+}
+
+.cellStar {
+  font-size: 16rpx;
+  line-height: 1;
+  color: rgba(146, 150, 173, 0.35);
+  margin: 0 1rpx;
+}
+
+.cellStarOn {
+  color: $color-star;
+}
+
+.cellHint {
+  margin-top: 6rpx;
+  font-size: 18rpx;
+  color: $color-text-tertiary;
+  white-space: nowrap;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-lg;
+}
+
+.pagerBtn {
+  padding: 0 $spacing-lg;
+  height: $button-height-sm;
+  border-radius: $radius-button;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.pagerBtnDisabled {
+  opacity: 0.4;
+}
+
+.pagerText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.pagerInfo {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.tips {
+  display: block;
+  margin-top: $spacing-lg;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+}
